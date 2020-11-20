@@ -34,9 +34,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     curl_close($ch);
 
     //Busca si existe una combinacion de cable para los parametros ingresados
-    header("HTTP/1.1 200 OK");
-    echo ($response2);
-    exit();
+    // header("HTTP/1.1 200 OK");
+    // echo ($response2);
+    // exit();
+
+    //Verifica si existe un cable para los parametros ingresados
+    if(!empty($response2))
+    {
+        header("HTTP/1.1 200 OK");
+        $array["codigo"]="100";
+        $array["respuesta"]=$response2;
+        echo json_encode($array);
+        exit();
+    }
+    else {
+        header("HTTP/1.1 400 ERROR");
+        $array["codigo"]="0";
+        $array["respuesta"]="No se encontro un cable para los parametros ingresados";
+        echo json_encode($array);
+        exit();
+    }   
 
 }
 

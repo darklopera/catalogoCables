@@ -27,14 +27,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     {
             
         header("HTTP/1.1 200 OK");
-        echo json_encode($result);
+        $array["codigo"]="100";
+        $array["respuesta"]=$result;
+        echo json_encode($array);
         exit();
     
         }
 
         else {
                 header("HTTP/1.1 400 ERROR");
-                echo "No se encontró una combinación de cable para los datos ingresados";
+                $array["codigo"]="0";
+                $array["respuesta"]="No se encontró una combinación de cable para los datos ingresados";
+                echo json_encode($array);
                 exit();
         }
                 
