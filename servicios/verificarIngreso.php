@@ -7,20 +7,13 @@ $dbConn =  connect($db);
 if ($_SERVER['REQUEST_METHOD'] == 'POST')
 {   
     $input = $_POST;
-//     $sql = "SELECT id, nombre, correo, idEstado FROM usuario 
-//             WHERE (usuario=:usuario) AND (contrasena=:contrasena)";
 
 $sql="SELECT us.id, us.nombre, us.correo, us.idEstado, es.nombre as nombreEstado 
 FROM usuario as us
 INNER JOIN estado as es
 ON us.idEstado=es.id
-WHERE (usuario=:usuario) AND (contrasena=:contrasena)";
+WHERE (us.usuario=:usuario) AND (us.contrasena=:contrasena)";
 
-
-// SELECT column_name(s)
-// FROM table1
-// INNER JOIN table2
-// ON table1.column_name = table2.column_name;
 
     $statement = $dbConn->prepare($sql);
     bindAllValues($statement, $input);
@@ -28,8 +21,10 @@ WHERE (usuario=:usuario) AND (contrasena=:contrasena)";
     $statement->setFetchMode(PDO::FETCH_ASSOC);
     $result=$statement->fetchAll();
 
+    //Verifica que el usuario exite en la base de datos
     if(!empty($result))
     {
+            //Verifica el estado activo del usuario
             if($result[0]['idEstado']==1)
             {
                     header("HTTP/1.1 200 OK");
