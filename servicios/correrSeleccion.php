@@ -33,11 +33,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     $response2 = curl_exec($ch);
     curl_close($ch);
 
-    //Busca si existe una combinacion de cable para los parametros ingresados
-    // header("HTTP/1.1 200 OK");
-    // echo ($response2);
-    // exit();
-
     //Verifica si existe un cable para los parametros ingresados
     if(!empty($response2))
     {

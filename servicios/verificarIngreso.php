@@ -35,8 +35,6 @@ WHERE (us.usuario=:usuario) AND (us.contrasena=:contrasena)";
 
                 }
                 else {
-                        header("HTTP/1.1 200 OK");
-                        echo "El usuario ingresado no se encuentra activo";
 
                         header("HTTP/1.1 400 ERROR");
                         $array["codigo"]="0";
@@ -45,30 +43,13 @@ WHERE (us.usuario=:usuario) AND (us.contrasena=:contrasena)";
                         exit();
                 }
         }
-
         else {
                 header("HTTP/1.1 400 ERROR");
                 $array["codigo"]="0";
                 $array["respuesta"]= "Favor verificar la informacion ingresada";
+                echo json_encode($array);
                 exit();
         }
-
-        //Verifica si existen selecciones creadas para el usuario
-    if(!empty($result))
-    {
-        header("HTTP/1.1 200 OK");
-        $array["codigo"]="100";
-        $array["respuesta"]=$result;
-        echo json_encode($array);
-        exit();
-    }
-    else {
-        header("HTTP/1.1 400 ERROR");
-        $array["codigo"]="0";
-        $array["mensaje"]="No se encontraron selecciones para el usuario";
-        echo json_encode($array);
-        exit();
-    }   
                 
 }
 
