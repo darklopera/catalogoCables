@@ -1,13 +1,27 @@
 <?php
+
+header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Headers: *");
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+
+
 include "config.php";
 include "utils.php";
 
 $dbConn =  connect($db);
 
+$postdata = file_get_contents("php://input");
+$datosEntrada = json_decode($postdata,true);
+
+//datos de entrada
+$ampacidad = $datosEntrada["ampacidad"];
+$idMaterial = $datosEntrada["idmaterial"];
+
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST')
 {   
-    $ampacidad = $_POST["ampacidad"];
-    $idMaterial = $_POST["idMaterial"];
+    // $ampacidad = $_POST["ampacidad"];
+    // $idMaterial = $_POST["idMaterial"];
 
     //datos a enviar
     $data = array("ampacidad" => $ampacidad);
@@ -23,15 +37,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     //obtenemos la respuesta
     $response = curl_exec($ch);
     // Se cierra el recurso CURL y se liberan los recursos del sistema
-    curl_close($ch);
+    // curl_close($ch);
+
+    echo json_encode($response);
+    echo "Lopera esta aqui";
 
     $data2 = array("ampacidad"=>$response, "idmaterial" => $idMaterial);
+     echo json_encode($data2);
     $ch = curl_init("http://localhost/catalogoCables/servicios/buscarSemejante.php");
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
     curl_setopt($ch, CURLOPT_POSTFIELDS,http_build_query($data2));
     $response2 = curl_exec($ch);
     curl_close($ch);
+
+     // echo ($response2);
+    
 
     //Verifica si existe un cable para los parametros ingresados
     if(!empty($response2))
@@ -43,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         exit();
     }
     else {
-        header("HTTP/1.1 400 ERROR");
+        header("HTTP/1.1 200 OK");
         $array["codigo"]="0";
         $array["respuesta"]="No se encontro un cable para los parametros ingresados";
         echo json_encode($array);

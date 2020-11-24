@@ -1,4 +1,9 @@
 <?php
+
+header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Headers: *");
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+
 include "config.php";
 include "utils.php";
 
@@ -27,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         exit();
     }
     else {
-        header("HTTP/1.1 400 ERROR");
+        header("HTTP/1.1 200 OK");
         echo "0";
         $array["codigo"]="0";
         $array["respuesta"]="No se encontraron proyectos activos";

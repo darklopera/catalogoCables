@@ -1,8 +1,20 @@
 <?php
+
+header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Headers: *");
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+
 include "config.php";
 include "utils.php";
 
 $dbConn =  connect($db);
+
+$postdata = file_get_contents("php://input");
+$datosEntrada = json_decode($postdata,true);
+
+//datos de entrada
+$usuario = $datosEntrada["usuario"];
+$contrasena = $datosEntrada["contrasena"];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST')
 {   
@@ -12,7 +24,9 @@ $sql="SELECT us.id, us.nombre, us.correo, us.idEstado, es.nombre as nombreEstado
 FROM usuario as us
 INNER JOIN estado as es
 ON us.idEstado=es.id
-WHERE (us.usuario=:usuario) AND (us.contrasena=:contrasena)";
+WHERE (us.usuario='".$usuario."') AND (us.contrasena='".$contrasena."')";
+
+// echo $sql;
 
 
     $statement = $dbConn->prepare($sql);
@@ -36,7 +50,7 @@ WHERE (us.usuario=:usuario) AND (us.contrasena=:contrasena)";
                 }
                 else {
 
-                        header("HTTP/1.1 400 ERROR");
+                        header("HTTP/1.1 200 OK");
                         $array["codigo"]="0";
                         $array["respuesta"]= "El usuario ingresado no se encuentra activo";
                         echo json_encode($array);
@@ -44,7 +58,7 @@ WHERE (us.usuario=:usuario) AND (us.contrasena=:contrasena)";
                 }
         }
         else {
-                header("HTTP/1.1 400 ERROR");
+                header("HTTP/1.1 200 OK");
                 $array["codigo"]="0";
                 $array["respuesta"]= "Favor verificar la informacion ingresada";
                 echo json_encode($array);

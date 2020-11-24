@@ -1,15 +1,10 @@
 <?php
-
-header('Access-Control-Allow-Origin: *');
-header("Access-Control-Allow-Headers: *");
-header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
-
 include "config.php";
 include "utils.php";
 
 $dbConn =  connect($db);
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST')
+if ($_SERVER['REQUEST_METHOD'] == 'GET')
 {   
     $input = $_POST;
     $sql="SELECT * 
@@ -32,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         exit();
     }
     else {
-        header("HTTP/1.1 200 OK");
+        header("HTTP/1.1 400 ERROR");
         echo "0";
         $array["codigo"]="0";
         $array["respuesta"]="No se encontraron materiales activos";

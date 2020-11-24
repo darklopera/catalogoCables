@@ -1,8 +1,24 @@
 <?php
+
+header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Headers: *");
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+
 include "config.php";
 include "utils.php";
 
 $dbConn =  connect($db);
+
+$postdata = file_get_contents("php://input");
+$datosEntrada = json_decode($postdata,true);
+
+//datos de entrada
+$nombre = $datosEntrada["nombre"];
+$codigoCatalogo = $datosEntrada["codigoCatalogo"];
+$idUsuario = $datosEntrada["idUsuario"];
+$idProyecto = $datosEntrada["idProyecto"];
+$instalacion = $datosEntrada["instalacion"];
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST')
 {       
@@ -11,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     $sql = "INSERT INTO seleccion
           (nombre, codigoCatalogo, idUsuario, idProyecto, fechainsercion, instalacion)
           VALUES
-          (:nombre, :codigoCatalogo, :idUsuario, :idProyecto, NOW(), :instalacion)";
+          ('".$nombre."', '".$codigoCatalogo."', '".$idUsuario."','".$idProyecto."', NOW(),'".$instalacion."')";
 
     //echo $sql;
     $statement = $dbConn->prepare($sql);
@@ -29,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         exit();
     }
     else {
-        header("HTTP/1.1 400 ERROR");
+        header("HTTP/1.1 200 OK");
         $array["codigo"]="0";
         $array["respuesta"]="No se pudo insertar la seleccion";
         echo json_encode($array);

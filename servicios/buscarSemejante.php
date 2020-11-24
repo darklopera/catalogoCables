@@ -1,8 +1,29 @@
 <?php
+
+header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Headers: *");
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+
 include "config.php";
 include "utils.php";
 
 $dbConn =  connect($db);
+
+$postdata = file_get_contents("php://input");
+$datosEntrada = json_decode($postdata,true);
+
+//datos de entrada
+
+// echo json_encode($datosEntrada);
+
+$ampacidad = $datosEntrada["ampacidad"];
+$material = $datosEntrada["material"];
+// $idMaterial = $datosEntrada["idMaterial"];
+
+ // echo json_decode($datosEntrada);
+ // echo "ampacidad arriva";
+
+// echo " Lopera y alejo viendo";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST')
 {   
@@ -11,9 +32,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     $sql="SELECT ca.*,  ma.nombre as nombreMaterial
     FROM catalogo as ca
     INNER JOIN material as ma
-    ON ca.idmaterial=ma.id
-    WHERE (ca.ampacidad=:ampacidad) AND (ca.idmaterial=:idmaterial)";
+    ON ca.idMaterial=ma.id
+    WHERE (ca.ampacidad='".$ampacidad."') AND (ma.nombre='".$material."')";
 
+    // echo $sql;
+//WHERE (ca.ampacidad='1.26') AND (ca.idMaterial='1')";
 
     $statement = $dbConn->prepare($sql);
     bindAllValues($statement, $input);
@@ -35,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         }
 
         else {
-                header("HTTP/1.1 400 ERROR");
+                header("HTTP/1.1 200 OK");
                 $array["codigo"]="0";
                 $array["respuesta"]="No se encontró una combinación de cable para los datos ingresados";
                 echo json_encode($array);

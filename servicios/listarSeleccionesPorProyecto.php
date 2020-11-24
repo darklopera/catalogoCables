@@ -1,8 +1,18 @@
 <?php
+
+header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Headers: *");
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+
 include "config.php";
 include "utils.php";
 
 $dbConn =  connect($db);
+
+$postdata = file_get_contents("php://input");
+$datosEntrada = json_decode($postdata,true);
+
+$idUsuario = $datosEntrada["idUsuario"];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST')
 {   
@@ -17,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     ON sel.idUsuario = usu.id
     INNER JOIN proyecto as pro
     ON sel.idProyecto = pro.id
-    WHERE sel.idUsuario =:idUsuario";
+    WHERE sel.idUsuario = '".$idUsuario."'";
 
     $statement = $dbConn->prepare($sql);
     bindAllValues($statement, $input);
@@ -36,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         exit();
     }
     else {
-        header("HTTP/1.1 400 ERROR");
+        header("HTTP/1.1 200 OK");
         $array["codigo"]="0";
         $array["respuesta"]="No se encontraron selecciones para el usuario";
         echo json_encode($array);
