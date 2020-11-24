@@ -16,7 +16,7 @@ $datosEntrada = json_decode($postdata,true);
 $nombre = $datosEntrada["nombre"];
 $codigoCatalogo = $datosEntrada["codigoCatalogo"];
 $idUsuario = $datosEntrada["idUsuario"];
-$idProyecto = $datosEntrada["idProyecto"];
+$proyecto = $datosEntrada["proyecto"];
 $instalacion = $datosEntrada["instalacion"];
 $corriente = $datosEntrada["corriente"];
 
@@ -25,10 +25,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 {       
     $input = $_POST;
     //$date= date_format($date,"Y/m/d H:i:s");
-    $sql = "INSERT INTO seleccion
+    // $sql = "INSERT INTO seleccion
+    //       (nombre, codigoCatalogo, idUsuario, idProyecto, fechainsercion, instalacion, corriente)
+    //       VALUES
+    //       ('".$nombre."', '".$codigoCatalogo."', '".$idUsuario."','".$idProyecto."', NOW(),'".$instalacion."','".$corriente."')";
+
+          $sql = "INSERT INTO seleccion
           (nombre, codigoCatalogo, idUsuario, idProyecto, fechainsercion, instalacion, corriente)
           VALUES
-          ('".$nombre."', '".$codigoCatalogo."', '".$idUsuario."','".$idProyecto."', NOW(),'".$instalacion."','".$corriente."')";
+          ('".$nombre."', '".$codigoCatalogo."', '".$idUsuario."',(SELECT id FROM proyecto WHERE nombre='".$proyecto."'), NOW(),'".$instalacion."','".$corriente."')";
 
     //echo $sql;
     $statement = $dbConn->prepare($sql);
