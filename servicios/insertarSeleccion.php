@@ -11,13 +11,14 @@ $dbConn =  connect($db);
 
 $postdata = file_get_contents("php://input");
 $datosEntrada = json_decode($postdata,true);
-
+ 
 //datos de entrada
 $nombre = $datosEntrada["nombre"];
 $codigoCatalogo = $datosEntrada["codigoCatalogo"];
 $idUsuario = $datosEntrada["idUsuario"];
 $idProyecto = $datosEntrada["idProyecto"];
 $instalacion = $datosEntrada["instalacion"];
+$corriente = $datosEntrada["corriente"];
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST')
@@ -25,9 +26,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     $input = $_POST;
     //$date= date_format($date,"Y/m/d H:i:s");
     $sql = "INSERT INTO seleccion
-          (nombre, codigoCatalogo, idUsuario, idProyecto, fechainsercion, instalacion)
+          (nombre, codigoCatalogo, idUsuario, idProyecto, fechainsercion, instalacion, corriente)
           VALUES
-          ('".$nombre."', '".$codigoCatalogo."', '".$idUsuario."','".$idProyecto."', NOW(),'".$instalacion."')";
+          ('".$nombre."', '".$codigoCatalogo."', '".$idUsuario."','".$idProyecto."', NOW(),'".$instalacion."','".$corriente."')";
 
     //echo $sql;
     $statement = $dbConn->prepare($sql);

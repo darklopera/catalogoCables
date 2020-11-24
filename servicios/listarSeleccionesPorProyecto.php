@@ -18,16 +18,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 {   
     $input = $_POST;
     
-    $sql="SELECT  sel.id, sel.nombre, cat.corrienteCorregida, cat.tensionCorregida, 
-    cat.ampacidad, cat.corrienteCorregida, usu.nombre, pro.nombre, sel.fechaInsercion
-    FROM seleccion as sel
-    INNER JOIN catalogo as cat
+    $sql="SELECT  sel.nombre AS nombreSeleccion, sel.`corriente`, cat.`tensionCorregida`, cat.`ampacidad`, cat.`corrienteCorregida`, usu.`nombre` AS nombreUsuario,
+    pro.`nombre` AS nombreProyecto, sel.`fechaInsercion`
+    FROM seleccion AS sel
+    INNER JOIN catalogo AS cat
     ON sel.codigoCatalogo = cat.codigo
-    INNER JOIN usuario as usu
+    INNER JOIN usuario AS usu
     ON sel.idUsuario = usu.id
-    INNER JOIN proyecto as pro
+    INNER JOIN proyecto AS pro
     ON sel.idProyecto = pro.id
-    WHERE sel.idUsuario = '".$idUsuario."'";
+    WHERE sel.idUsuario ='".$idUsuario."'";
+
+
 
     $statement = $dbConn->prepare($sql);
     bindAllValues($statement, $input);
